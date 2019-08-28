@@ -8,11 +8,11 @@
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>com.itmuch</groupId>
+    <artifactId>spring-cloud-wii-example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>spring-cloud-wii-example</name>
+    <description>Demo project for Wii</description>
 
     <properties>
         <java.version>1.8</java.version>
