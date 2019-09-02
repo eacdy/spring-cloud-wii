@@ -4,12 +4,14 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 
+/**
+ * @author www.itmuch.com
+ */
 @ConfigurationProperties("wii")
 @Data
 @Validated

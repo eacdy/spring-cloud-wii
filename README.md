@@ -1,6 +1,13 @@
 # README
 
-Spring Cloud Wii是一个用于快速 **完美整合** Spring Cloud与 **异构微服务** 的框架，基于Spring Cloud Gateway以及Nacos Discovery，灵感来自 [Sidecar](https://github.com/spring-cloud/spring-cloud-netflix/tree/master/spring-cloud-netflix-sidecar) 。
+![wii](wii.png)
+
+> LOGO制作网站：`http://www.uugai.com/`
+
+Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服务** 的框架，灵感来自 [Spring Cloud Netflix Sidecar](https://github.com/spring-cloud/spring-cloud-netflix/tree/master/spring-cloud-netflix-sidecar) 。目前支持的服务发现组件：
+
+* Nacos
+* Consul
 
 
 
@@ -10,7 +17,7 @@ Spring Cloud Wii是一个用于快速 **完美整合** Spring Cloud与 **异构�
 
 非Spring Cloud应用，统称异构微服务。比如你的遗留项目，或者非JVM应用。
 
-### 完美整合有三层含义：
+### “完美整合”的三层含义
 
 * 享受服务发现的优势
 * 有负载均衡
@@ -22,8 +29,8 @@ Spring Cloud Wii是一个用于快速 **完美整合** Spring Cloud与 **异构�
 
 原因有两点：
 
-* Spring Cloud有个子项目 `Spring Cloud Netflix Sidecar` 是支持快速整合异构微服务的，然而Sidecar只支持使用Eureka作为服务发现，而我们的项目需要使用Nacos。
-* Sidecar是基于Zuul 1.x的，Spring Cloud官方明确声明，未来将会逐步淘汰Zuul。今年早些时候，我有给Spring Cloud官方提出需求，希望官方实现一个基于Spring Cloud Gateway的新一代Sidecar，然而官方表示并没有该计划。详见：<https://github.com/spring-cloud/spring-cloud-gateway/issues/735>
+* Spring Cloud子项目 `Spring Cloud Netflix Sidecar` 是可以快速整合异构微服务的。然而，Sidecar只支持使用Eureka作为服务发现，**如果服务发现组件使用的Nacos或Consul就抓瞎了**。
+* **Sidecar是基于Zuul 1.x的**，Spring Cloud官方明确声明，未来将会逐步淘汰Zuul。今年早些时候，我有给Spring Cloud官方提出需求，希望官方实现一个基于Spring Cloud Gateway的新一代Sidecar，然而官方表示并没有该计划。详见：<https://github.com/spring-cloud/spring-cloud-gateway/issues/735>
 
 既然没有，索性自己写了。
 
@@ -31,14 +38,26 @@ Spring Cloud Wii是一个用于快速 **完美整合** Spring Cloud与 **异构�
 
 ## 原理
 
-* Wii根据配置的异构微服务的IP、端口等信息，**将异构微服务的IP/端口注册到Nacos上** 。
-* Wii实现了 **健康检查** ，如果异构微服务挂掉，Wii会自动将代表异构微服务的实例下线；如果异构微服务恢复正常，则会自动上线。最长延迟是30秒，详见 `com.itmuch.wii.WiiChecker#check` 。
+* Wii根据配置的异构微服务的IP、端口等信息，**将异构微服务的IP/端口注册到服务发现组件上** 。
+* Wii实现了 **健康检查** ，Wii会定时检测异构微服务是否健康。如果发现异构微服务不健康，Wii会自动将代表异构微服务的Wii实例下线；如果异构微服务恢复正常，则会自动上线。最长延迟是30秒，详见 `WiiChecker#check` 。
 
 
 
-## 使用
+## 要求
 
-详见 `spring-cloud-wii-example` 。
+- 【必须】你的异构微服务需使用HTTP通信。这一点严格来说不算要求，因为Spring Cloud本身就是基于HTTP的；
+- 【可选】如果微服务配置了 `wii.health-check-url` ，则表示开启了Wii的健康检查，此时，你的异构微服务需实现健康检查。可以是空实现，只要准备一个端点，能返回类似 `{"status": "UP"}` 的字符串即可。
+
+
+
+## 使用示例
+
+* 如使用Nacos作为服务发现组件，详见 `examples/spring-cloud-wii-example-nacos` 
+* 如使用Consul作为服务发现组件，详见 `examples/spring-cloud-wii-example-consul`
+
+
+
+### 示例代码（以Nacos服务发现为例）
 
 * 依赖管理：Spring Cloud Alibaba版本必须是2.1.x+，否则会报错。这主要是因为Spring Cloud Alibaba修改了包名命名…不同版本的类名包结构不同，而Wii使用了Nacos的类，所以版本必须保持一致。
 
@@ -102,8 +121,6 @@ Spring Cloud Wii是一个用于快速 **完美整合** Spring Cloud与 **异构�
 
 
 
-## 测试
-
 ### 异构微服务
 
 我这里准备了一个NodeJS编写的简单微服务。
@@ -139,7 +156,11 @@ server.listen(8060, function() {
 
 
 
-### 测试1：Spring Cloud完美调用异构微服务
+
+
+### 测试
+
+#### 测试1：Spring Cloud完美调用异构微服务
 
 你的Spring Cloud项目整合Ribbon，只需构建 `http://wii-node-service` 就可以请求到异构微服务了。
 
@@ -151,7 +172,7 @@ Ribbon请求 `http://wii-node-service/` 会请求到 `http://localhost:8060/` �
 
 
 
-### 测试2：异构微服务完美调用Spring Cloud
+#### 测试2：异构微服务完美调用Spring Cloud
 
 由于Wii基于Spring Cloud Gateway，而网关自带转发能力啊。
 
@@ -163,14 +184,14 @@ Ribbon请求 `http://wii-node-service/` 会请求到 `http://localhost:8060/` �
 
 
 
-## Wii的优缺点
+## Wii优缺点分析
 
-Wii的使用和Sidecar基本一致，所以Wii的优缺点和Sidecar的优缺点也是一样的。
+Wii的设计和Sidecar基本一致，所以Wii的优缺点和Sidecar的优缺点也是一样的。
 
 优点：
 
-* 简单方便
-* 代码少
+* 接入简单，轻松接入异构微服务
+* 不侵入原代码
 
 缺点：
 

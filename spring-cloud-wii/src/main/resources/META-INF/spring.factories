@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.itmuch.wii.WiiAutoConfiguration
+  com.itmuch.wii.nacos.WiiNacosAutoConfiguration,\
+  com.itmuch.wii.WiiAutoConfiguration,\
+  com.itmuch.wii.consul.WiiConsulAutoConfiguration
