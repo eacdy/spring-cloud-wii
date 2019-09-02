@@ -12,7 +12,7 @@ import java.net.SocketException;
  * @author itmuch.com
  */
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class WiiDiscoveryProperties extends NacosDiscoveryProperties {
+public class WiiNacosDiscoveryProperties extends NacosDiscoveryProperties {
     private final WiiProperties wiiProperties;
 
     @Override
