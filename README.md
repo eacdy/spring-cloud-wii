@@ -1,4 +1,4 @@
-# README
+# Spring Cloud Wii
 
 ![wii](wii.png)
 
@@ -29,7 +29,7 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
 
 原因有两点：
 
-* Spring Cloud子项目 `Spring Cloud Netflix Sidecar` 是可以快速整合异构微服务的。然而，Sidecar只支持使用Eureka作为服务发现，**如果服务发现组件使用的Nacos或Consul就抓瞎了**。
+* Spring Cloud子项目 `Spring Cloud Netflix Sidecar` 是可以快速整合异构微服务的。然而，Sidecar只支持使用Eureka作为服务发现，**如果使用其他服务发现组件就抓瞎了**。
 * **Sidecar是基于Zuul 1.x的**，Spring Cloud官方明确声明，未来将会逐步淘汰Zuul。今年早些时候，我有给Spring Cloud官方提出需求，希望官方实现一个基于Spring Cloud Gateway的新一代Sidecar，然而官方表示并没有该计划。详见：<https://github.com/spring-cloud/spring-cloud-gateway/issues/735>
 
 既然没有，索性自己写了。
@@ -46,7 +46,7 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
 ## 要求
 
 - 【必须】你的异构微服务需使用HTTP通信。这一点严格来说不算要求，因为Spring Cloud本身就是基于HTTP的；
-- 【可选】如果微服务配置了 `wii.health-check-url` ，则表示开启了Wii的健康检查，此时，你的异构微服务需实现健康检查。可以是空实现，只要准备一个端点，能返回类似 `{"status": "UP"}` 的字符串即可。
+- 【可选】如果微服务配置了 `wii.health-check-url` ，则表示开启了Wii的健康检查，此时，你的异构微服务需实现健康检查（可以是空实现，只要暴露一个端点，返回类似 `{"status": "UP"}` 的字符串即可）。
 
 
 
@@ -117,7 +117,7 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
     health-check-url: http://localhost:8060/health.json
   ```
 
-  配置比较简单，就是把Wii注册到Nacos上，然后写了一堆wii的配置就OK了。
+  配置比较简单，就是把Wii注册到Nacos上，然后添加了几行wii的配置。
 
 
 
@@ -160,7 +160,7 @@ server.listen(8060, function() {
 
 ### 测试
 
-#### 测试1：Spring Cloud完美调用异构微服务
+#### 测试1：Spring Cloud微服务完美调用异构微服务
 
 你的Spring Cloud项目整合Ribbon，只需构建 `http://wii-node-service` 就可以请求到异构微服务了。
 
@@ -172,7 +172,7 @@ Ribbon请求 `http://wii-node-service/` 会请求到 `http://localhost:8060/` �
 
 
 
-#### 测试2：异构微服务完美调用Spring Cloud
+#### 测试2：异构微服务完美调用Spring Cloud微服务
 
 由于Wii基于Spring Cloud Gateway，而网关自带转发能力啊。
 
@@ -186,15 +186,15 @@ Ribbon请求 `http://wii-node-service/` 会请求到 `http://localhost:8060/` �
 
 ## Wii优缺点分析
 
-Wii的设计和Sidecar基本一致，所以Wii的优缺点和Sidecar的优缺点也是一样的。
+Wii的设计和Sidecar基本一致，优缺点和Sidecar的优缺点也是一样的。
 
 优点：
 
-* 接入简单，轻松接入异构微服务
+* 接入简单，几行代码就可以将异构微服务整合到Spring Cloud生态
 * 不侵入原代码
 
 缺点：
 
-* 一个异构微服务实例，需要额外部署一个Sidecar，增加了部署成本；
-* 对于异构微服务，经过了一层转发，性能下降。
+* 每接入一个异构微服务实例，都需要额外部署一个Wii实例，增加了部署成本（虽然这个成本在Kubernetes环境中几乎可以忽略不计（只需将Wii实例和异构微服务作为一个Pod部署即可））；
+* 异构微服务调用Spring Cloud微服务时，本质是把Wii当网关在使用，经过了一层转发，性能有一定下降。
 
