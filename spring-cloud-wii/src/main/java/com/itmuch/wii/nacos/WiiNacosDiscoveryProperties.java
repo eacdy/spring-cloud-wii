@@ -1,10 +1,10 @@
 package com.itmuch.wii.nacos;
 
-import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.itmuch.wii.WiiProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.alibaba.nacos.NacosDiscoveryProperties;
 
 import java.net.SocketException;
 

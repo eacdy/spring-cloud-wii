@@ -5,8 +5,7 @@
 
     <groupId>com.itmuch</groupId>
     <artifactId>spring-cloud-wii</artifactId>
-    <version>0.9.0-RELEASE</version>
-    <url>https://github.com/eacdy/spring-cloud-wii</url>
+    <version>0.0.1-SNAPSHOT</version>
     <name>spring-cloud-wii</name>
     <description>An easy way to integrate polyglot apps for Spring Cloud Alibaba.</description>
 
