@@ -140,7 +140,7 @@ var server = http.createServer(function(req, res) {
     if (pathname === '/') {
         res.end(JSON.stringify({ "index" : "欢迎来到首页" }));
     }
-    // 访问http://localhost:8060/health，将会返回{"status":"UP"}
+    // 访问http://localhost:8060/health.json，将会返回{"status":"UP"}
     else if (pathname === '/health.json') {
         res.end(JSON.stringify({ "status" : "UP" }));
     }
