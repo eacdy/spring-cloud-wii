@@ -59,7 +59,7 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
 
 ### 示例代码（以Nacos服务发现为例）
 
-* 依赖管理：Spring Cloud Alibaba版本必须是2.1.x+，否则会报错。这主要是因为Spring Cloud Alibaba修改了包名命名…不同版本的类名包结构不同，而Wii使用了Nacos的类，所以版本必须保持一致。
+* 依赖管理：Spring Cloud Alibaba版本必须是0.9.0，否则会报错。这主要是因为Spring Cloud Alibaba修改了包名命名…不同版本的类名包结构不同，而Wii使用了Nacos的类，所以版本必须保持一致。
 
   ```xml
   <dependencyManagement>
@@ -67,14 +67,14 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
+        <version>Greenwich.SR1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>com.alibaba.cloud</groupId>
+        <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>0.9.0.RELEASE</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -88,7 +88,7 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
   <dependency>
     <groupId>com.itmuch</groupId>
     <artifactId>spring-cloud-wii</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.9.0-RELEASE</version>
   </dependency>
   ```
 
