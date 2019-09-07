@@ -90,6 +90,7 @@ Spring Cloud Wii是一个用来 **快速整合** Spring Cloud 与 **异构微服
     <artifactId>spring-cloud-wii</artifactId>
     <version>0.9.0-RELEASE</version>
   </dependency>
+  <!-- 以及你注册中心的依赖 -->
   ```
 
 * 写配置：
